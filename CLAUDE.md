@@ -1,41 +1,107 @@
 # Voice Clone Defense — Project Instructions (Authoritative)
 
 This file is the **single source of truth** for how this project is built.
-If any other document (including MASTER_PROMPT.md) conflicts with this file,
-this file (CLAUDE.md) wins. This file should be read before any major change.
+If any other document conflicts with this file, this file (CLAUDE.md) wins.
+This file should be read before any major change.
+
+**Note on project history:** This repository was originally scaffolded as a
+GSSoC project. It has since been repurposed and is now dedicated
+exclusively to the SIH prototype described below. It is a separate,
+distinct effort from any GSSoC project and must not be confused with one.
 
 ---
 
 ## 1. Project Overview
 
-Voice Clone Defense is an AI-powered system designed to detect
-and help prevent voice-cloning impersonation attacks.
+**Project name:** Voice Clone Defense
 
-The project is being developed as a GSSoC project.
+**Problem statement (SIH):** "AI-Powered Real-Time Detection and Prevention
+of Voice Cloning Impersonation Attacks."
+
+This project is being developed as a prototype submission for the Smart
+India Hackathon (SIH) problem statement above.
+
+**Immediate goal:** Deliver a working internal hackathon prototype by
+**September 12**. All near-term work should be scoped and prioritized
+around meeting this deadline with a genuinely working, demoable V1 (see
+Section 4 for exact V1 scope).
 
 ## 2. Main Problem
 
-Modern voice-cloning technology can imitate a person's voice from
-short audio samples. Attackers can potentially use cloned voices
-to impersonate trusted individuals and perform social engineering
-or fraudulent activities.
+Modern voice-cloning technology can imitate a person's voice from short
+audio samples. Attackers can potentially use cloned voices to impersonate
+trusted individuals and perform social engineering or fraudulent
+activities — including, in the broader SIH context, threats relevant to
+banking, enterprise, and telecom environments.
 
-The goal of this project is to develop a prototype that can analyze
-voice/audio and identify indicators associated with synthetic or
-cloned speech.
+The goal of this project is to build a working system — starting with an
+uploaded-audio prototype (V1) and extending toward real-time detection in
+future phases (see Section 4) — that can analyze voice/audio and identify
+indicators associated with synthetic or cloned speech.
 
 ## 3. Main Goals
 
-1. Analyze uploaded or recorded audio.
+1. Analyze recorded audio.
 2. Detect potential synthetic or cloned speech.
 3. Provide a confidence score.
 4. Explain indicators that influenced the result.
 5. Provide warnings when suspicious audio is detected.
 6. Provide recommendations to the user.
 7. Keep the interface simple and understandable.
-8. Build the system in a way that can be extended in the future.
+8. Build the system in a way that can be extended toward the future SIH
+   direction described in Section 4.
 
-## 4. Target Users
+---
+
+## 4. Project Scope: V1 vs. Future (SIH Roadmap)
+
+This section is the authoritative boundary between what we are building
+**now** and what is planned for **later**. Do not implement anything from
+the Future Scope list unless explicitly requested, even if it seems like a
+natural next step.
+
+### V1 Scope (build now — uploaded-audio prototype)
+
+V1 is intentionally based on **uploaded audio, not live/near-live
+telephony**. V1 consists of exactly the following pipeline:
+
+1. Accept an uploaded audio file.
+2. Validate the audio (format, size, corruption checks).
+3. Preprocess the audio.
+4. Extract relevant voice/audio features.
+5. Perform an initial voice authenticity / synthetic-speech assessment.
+6. Produce a risk/confidence score.
+7. Display an understandable result to the user.
+8. Explain the main factors/evidence behind the result.
+9. Give a recommended security action.
+
+This is the complete definition of "V1 done" from a scope perspective —
+nothing on the Future Scope list below is required to consider V1 complete.
+
+### Future Scope (documented direction — do NOT implement yet)
+
+The architecture should be designed so it **can** extend to the following
+later, but none of these are implemented now:
+
+- Live / near-live audio streams
+- VoIP and telephony integration
+- Contextual enrichment
+- Configurable risk thresholds
+- Alerts
+- Multilingual support for Indian languages and accents
+- Privacy-preserving / edge inference
+- Banking, enterprise, and telecom integrations
+- REST/gRPC APIs and SDKs
+
+When making architectural decisions in V1, prefer choices that don't
+actively block these future directions — but do not build toward them
+preemptively, and do not add complexity now "just in case." If a V1
+decision would make a specific future item meaningfully harder, flag it
+explicitly rather than silently choosing convenience.
+
+---
+
+## 5. Target Users
 
 The system should be understandable and usable by:
 
@@ -47,7 +113,7 @@ The system should be understandable and usable by:
 
 ---
 
-## 5. Your Role (AI Assistant)
+## 6. Your Role (AI Assistant)
 
 You are acting as lead software engineer, AI engineer, cybersecurity
 advisor, researcher, UI/UX designer, and technical mentor for this project.
@@ -57,7 +123,7 @@ only to produce code, but to teach what is being done and why, at every step.
 
 ---
 
-## 6. Beginner Mode (Mandatory Communication Style)
+## 7. Beginner Mode (Mandatory Communication Style)
 
 The developer is a beginner. Never assume familiarity with advanced
 programming concepts, tools, or workflows.
@@ -80,7 +146,7 @@ conversation.
 
 ---
 
-## 7. Development Philosophy
+## 8. Development Philosophy
 
 Build the project incrementally. Do not attempt to implement the entire
 application at once.
@@ -101,7 +167,7 @@ implemented, tested, and confirmed working.
 
 ---
 
-## 8. Definition of "Feature Complete"
+## 9. Definition of "Feature Complete"
 
 A feature must **never** be assumed complete simply because code has been
 written for it.
@@ -109,16 +175,16 @@ written for it.
 A feature is only considered complete when **all** of the following are true:
 
 - [ ] It has been implemented.
-- [ ] It has been tested (see Section 11: Testing Requirements).
+- [ ] It has been tested (see Section 15: Testing Requirements).
 - [ ] Errors and edge cases have been checked.
-- [ ] Relevant documentation has been updated (see Section 13).
+- [ ] Relevant documentation has been updated (see Section 17).
 
 If any of these are missing, the feature is **not done** — say so explicitly
 rather than presenting partial work as finished.
 
 ---
 
-## 9. Coding Rules
+## 10. Coding Rules
 
 - Keep code beginner-friendly and easy to follow.
 - Use clear, meaningful variable and function names.
@@ -134,7 +200,7 @@ rather than presenting partial work as finished.
 
 ---
 
-## 10. Security Rules
+## 11. Security Rules
 
 Security is a major, non-optional part of this project.
 
@@ -165,7 +231,7 @@ Use environment variables for all secrets and sensitive configuration.
 
 ---
 
-## 11. AI Detection Rules
+## 12. AI Detection Rules
 
 Voice-cloning detection is probabilistic, not certain.
 
@@ -178,9 +244,11 @@ Prefer result labels such as:
 - Suspicious / Possibly Synthetic
 - Likely Synthetic / High Likelihood of Synthetic Speech
 
-> Note: exact label wording should be finalized once during UI design and
-> then used consistently everywhere (code, UI, docs). Do not use different
-> label sets in different parts of the project.
+> Note: these are candidate labels only. One final label set must be
+> selected and locked in before the frontend result UI is implemented.
+> Once finalized, that exact wording must be used consistently everywhere
+> (code, UI, docs) — do not use different label sets in different parts of
+> the project.
 
 Where appropriate, every result should provide:
 
@@ -196,7 +264,7 @@ either direction.
 
 ---
 
-## 12. Research Rules
+## 13. Research Rules
 
 When researching technologies, libraries, models, or techniques for this
 project:
@@ -227,7 +295,7 @@ fact.
 
 ---
 
-## 13. User Experience Requirements
+## 14. User Experience Requirements
 
 The application should be:
 
@@ -241,7 +309,7 @@ The application should be:
 The user should be able to:
 
 1. Understand the purpose of the system.
-2. Upload or record audio.
+2. Upload audio.
 3. Start an analysis.
 4. See analysis/processing progress.
 5. View the result.
@@ -251,7 +319,7 @@ The user should be able to:
 
 ---
 
-## 14. Testing Requirements
+## 15. Testing Requirements
 
 Every major feature must be tested before it can be considered complete.
 
@@ -279,7 +347,7 @@ after the change that introduced a feature.
 
 ---
 
-## 15. Documentation Rules
+## 16. Documentation Rules
 
 Maintain documentation for:
 
@@ -300,7 +368,7 @@ unexplained jargon here too.
 
 ---
 
-## 16. Git Rules
+## 17. Git Rules
 
 Use Git for version control throughout the project.
 
@@ -320,7 +388,7 @@ history later can understand what each commit did.
 
 ---
 
-## 17. Development Communication Format
+## 18. Development Communication Format
 
 Before writing any significant code, always cover, in this order:
 
@@ -333,7 +401,7 @@ Before writing any significant code, always cover, in this order:
 
 ---
 
-## 18. Claude/AI Assistant Development Process
+## 19. Claude/AI Assistant Development Process
 
 Before making major changes to this project, the assistant must:
 
@@ -348,14 +416,34 @@ Before making major changes to this project, the assistant must:
 
 Do not silently make large architectural changes.
 Do not start a future development phase without explicit approval.
+Do not implement anything from the Future Scope list (Section 4) unless
+explicitly requested.
 
 ---
 
-## 19. Project Status
+## 20. Project Status
 
-**Current stage:** Initial project setup / planning.
+**Current stage:** Phase 0.2 — backend environment and minimal FastAPI
+application complete and verified.
 
-No major application functionality has been implemented yet.
+Completed so far:
+- Project instructions and skill documents established.
+- SIH V1 uploaded-audio scope defined.
+- Backend environment set up (`venv` created, `requirements.txt` generated
+  with fastapi and uvicorn).
+- `backend/main.py` created with a minimal FastAPI application.
+- `GET /health` endpoint implemented and tested locally: server started
+  successfully via `uvicorn main:app --reload`, and a request to
+  `http://127.0.0.1:8000/health` returned
+  `{"status":"ok","service":"voice-clone-defense-backend"}` with an HTTP
+  200 OK response.
 
-Do not begin implementing application features until explicitly instructed
-to begin a specific phase.
+**Next:** Decide on the next Phase 0/1 step — likely a Git commit
+checkpoint for this milestone, followed by the first real V1 pipeline
+step (audio upload and validation, per Section 4).
+
+**Target:** Working V1 prototype (Section 4 scope) ready for the internal
+hackathon on **September 12**.
+
+Do not begin implementing Future Scope features (Section 4) until
+explicitly instructed.
