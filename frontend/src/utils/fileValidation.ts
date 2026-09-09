@@ -6,6 +6,10 @@ export function validateAudioFile(file: File): string | null {
     return 'Please select an audio file.'
   }
 
+  if (file.size === 0) {
+    return 'The selected audio file is empty.'
+  }
+
   const fileName = file.name.toLowerCase()
   const isAllowed = ALLOWED_EXTENSIONS.some((extension) =>
     fileName.endsWith(extension)
