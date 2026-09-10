@@ -29,7 +29,7 @@ def test_upload_accepts_wav():
     )
 
     assert response.status_code == 200
-    assert response.json()["filename"] == "test.wav"
+    assert response.json()["status"] == "success"
 
 
 def test_analyze_rejects_invalid_extension():

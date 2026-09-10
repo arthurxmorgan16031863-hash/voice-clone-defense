@@ -39,7 +39,7 @@ import numpy as np
 import pytest
 import soundfile as sf
 
-from analysis.audio_analyzer import (
+from backend.analysis.audio_analyzer import (
     extract_features,
     AudioLoadError,
     MINIMUM_RELIABLE_DURATION_SECONDS,
