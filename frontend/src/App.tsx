@@ -48,55 +48,51 @@ function App() {
         </section>
 
         <section className="upload-card">
-                  <section className="process-section">
-          <div className="process-header">
-            <p className="section-label">HOW IT WORKS</p>
-            <h3>From recording to security insight</h3>
-          </div>
-
-          <div className="process-grid">
-            <div className="process-step">
-              <div className="process-number">01</div>
-              <div className="process-icon">🎙️</div>
-              <h4>Upload</h4>
-              <p>
-                Select a voice recording from your device.
-              </p>
+          <section className="process-section">
+            <div className="process-header">
+              <p className="section-label">HOW IT WORKS</p>
+              <h3>From recording to security insight</h3>
             </div>
 
-            <div className="process-arrow">→</div>
+            <div className="process-grid">
+              <div className="process-step">
+                <div className="process-number">01</div>
+                <div className="process-icon">🎙️</div>
+                <h4>Upload</h4>
+                <p>Select a voice recording from your device.</p>
+              </div>
 
-            <div className="process-step">
-              <div className="process-number">02</div>
-              <div className="process-icon">📊</div>
-              <h4>Analyze</h4>
-              <p>
-                Extract audio characteristics from the recording.
-              </p>
+              <div className="process-arrow">→</div>
+
+              <div className="process-step">
+                <div className="process-number">02</div>
+                <div className="process-icon">📊</div>
+                <h4>Analyze</h4>
+                <p>Extract audio characteristics from the recording.</p>
+              </div>
+
+              <div className="process-arrow">→</div>
+
+              <div className="process-step">
+                <div className="process-number">03</div>
+                <div className="process-icon">🛡️</div>
+                <h4>Assess</h4>
+                <p>Generate a probabilistic voice authenticity assessment.</p>
+              </div>
             </div>
+          </section>
 
-            <div className="process-arrow">→</div>
-
-            <div className="process-step">
-              <div className="process-number">03</div>
-              <div className="process-icon">🛡️</div>
-              <h4>Assess</h4>
-              <p>
-                Generate a probabilistic voice authenticity assessment.
-              </p>
-            </div>
-          </div>
-        </section>
           <div className="upload-icon">🎙️</div>
 
-<div className="upload-badge">AUDIO ANALYSIS</div>
+          <div className="upload-badge">AUDIO ANALYSIS</div>
 
-<h3>Upload a voice recording</h3>
+          <h3>Upload a voice recording</h3>
 
-<p className="upload-description">
-  Check an audio recording for characteristics associated with
-  synthetic or manipulated speech.
-</p>
+          <p className="upload-description">
+            Check an audio recording for characteristics associated with
+            synthetic or manipulated speech.
+          </p>
+
           <label className="upload-button">
             <span>Choose Audio File</span>
 
@@ -127,23 +123,23 @@ function App() {
           )}
 
           {filename && !error && !isAnalyzing && (
-  <>
-    <div className="status success" role="status">
-      <strong>Analysis complete</strong>
-      <span>{filename}</span>
-    </div>
+            <>
+              <div className="status success" role="status">
+                <strong>Analysis complete</strong>
+                <span>{filename}</span>
+              </div>
 
-    <label className="analyze-again-button">
-      <span>↻ Analyze Another File</span>
+              <label className="analyze-again-button">
+                <span>↻ Analyze Another File</span>
 
-      <input
-        type="file"
-        accept=".wav,.mp3,.m4a,.flac"
-        onChange={handleFileChange}
-      />
-    </label>
-  </>
-)}
+                <input
+                  type="file"
+                  accept=".wav,.mp3,.m4a,.flac"
+                  onChange={handleFileChange}
+                />
+              </label>
+            </>
+          )}
         </section>
 
         {features && (
@@ -245,26 +241,26 @@ function App() {
             </div>
 
             <div className="risk-details">
-  <div>
-    <span>Detection Result</span>
-    <strong>Pending model analysis</strong>
-  </div>
+              <div>
+                <span>Detection Result</span>
+                <strong>Pending model analysis</strong>
+              </div>
 
-  <div>
-    <span>Confidence</span>
-    <strong>Not available yet</strong>
-  </div>
-</div>
+              <div>
+                <span>Confidence</span>
+                <strong>Not available yet</strong>
+              </div>
+            </div>
 
-<div className="explanation-box">
-  <h4>Why is the result pending?</h4>
+            <div className="explanation-box">
+              <h4>Why is the result pending?</h4>
 
-  <p>
-    The system has extracted the recording's audio characteristics.
-    The synthetic-voice detection model will use these features to
-    provide a probabilistic assessment.
-  </p>
-</div>
+              <p>
+                The system has extracted the recording's audio characteristics.
+                The synthetic-voice detection model will use these features to
+                provide a probabilistic assessment.
+              </p>
+            </div>
           </section>
         )}
 
@@ -284,18 +280,20 @@ function App() {
             </div>
           </section>
         )}
-{!features && !isAnalyzing && !error && (
-  <section className="empty-state">
-    <div className="empty-state-icon">🎧</div>
 
-    <h3>Ready for analysis</h3>
+        {!features && !isAnalyzing && !error && (
+          <section className="empty-state">
+            <div className="empty-state-icon">🎧</div>
 
-    <p>
-      Upload a voice recording above to see its audio characteristics
-      and authenticity assessment.
-    </p>
-  </section>
-)}
+            <h3>Ready for analysis</h3>
+
+            <p>
+              Upload a voice recording above to see its audio characteristics
+              and authenticity assessment.
+            </p>
+          </section>
+        )}
+
         <section className="trust-section">
           <div>
             <span className="trust-icon">🔐</span>
