@@ -48,7 +48,9 @@ class RiskEngine:
         if not reasons and risk_level == "LOW":
             reasons.append("No significant anomalies detected in ML or Heuristic analysis.")
 
-        # 5. Calculate Confidence (tied to audio quality)
+        # 5. Clarified Confidence Calculation:
+        # Confidence reflects the reliability of the evidence based on acoustic quality.
+        # It scales directly with audio_quality_score.
         confidence = round(evidence.audio_quality_score, 2)
 
         return RiskAssessmentOutput(

@@ -1,153 +1,40 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from analysis.audio_analyzer import AudioLoadError, extract_features
+from fastapi import FastAPI, UploadFile, File
+from backend.security.file_security import validate_audio_file, save_temp_file_securely, securely_delete_file
+from backend.risk.risk_engine import RiskEngine
+from backend.risk.risk_models import EvidenceInput
 
-# This is the main FastAPI application.
 app = FastAPI(title="Voice Clone Defense API")
+risk_engine = RiskEngine()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Maximum upload size: 25 MB
-MAX_FILE_SIZE = 25 * 1024 * 1024
-
-# Audio formats allowed for V1.
-ALLOWED_EXTENSIONS = {
-    ".wav",
-    ".mp3",
-    ".m4a",
-    ".flac",
-}
-
-
-@app.get("/health")
-def health_check():
-    """
-    Checks whether the backend is running.
-    """
-    return {
-        "status": "ok",
-        "service": "voice-clone-defense-backend"
-    }
-
-
-@app.post("/upload")
-async def upload_audio(file: UploadFile = File(...)):
-    """
-    Receives an audio file and performs basic validation.
-    """
-    filename = file.filename or ""
-
-    # Get the file extension.
-    extension = ""
-    if "." in filename:
-        extension = "." + filename.rsplit(".", 1)[1].lower()
-
-    # Check whether the file type is supported.
-    if extension not in ALLOWED_EXTENSIONS:
-        raise HTTPException(
-            status_code=400,
-            detail="Unsupported audio format."
-        )
-
-    # Read the uploaded file.
-    contents = await file.read()
-
-    # Check whether the file is empty.
-    if not contents:
-        raise HTTPException(
-            status_code=400,
-            detail="The uploaded audio file is empty."
-        )
-
-    # Check the file size.
-    if len(contents) > MAX_FILE_SIZE:
-        raise HTTPException(
-            status_code=413,
-            detail="Audio file is too large. Maximum size is 25 MB."
-        )
-
-    return {
-        "status": "success",
-        "filename": filename,
-        "message": "Audio file uploaded and basic validation passed."
-    }
-
-
-@app.post("/analyze")
+@app.post("/api/v1/analyze")
 async def analyze_audio(file: UploadFile = File(...)):
-    """
-    Receives an audio file, validates it, and extracts
-    Stage 1 raw audio features.
-
-    This endpoint does NOT determine whether the audio is
-    human or AI-generated.
-    """
-    filename = file.filename or ""
-
-    # Get the file extension.
-    extension = ""
-    if "." in filename:
-        extension = "." + filename.rsplit(".", 1)[1].lower()
-
-    # Check whether the file type is supported.
-    if extension not in ALLOWED_EXTENSIONS:
-        raise HTTPException(
-            status_code=400,
-            detail="Unsupported audio format."
-        )
-
-    # Read the uploaded file.
-    contents = await file.read()
-
-    # Check whether the file is empty.
-    if not contents:
-        raise HTTPException(
-            status_code=400,
-            detail="The uploaded audio file is empty."
-        )
-
-    # Check the file size.
-    if len(contents) > MAX_FILE_SIZE:
-        raise HTTPException(
-            status_code=413,
-            detail="Audio file is too large. Maximum size is 25 MB."
-        )
-
-    # Save the uploaded audio temporarily.
-    import tempfile
-    import os
-
-    temp_file_path = None
-
+    # 1. Security validation boundary
+    validate_audio_file(file)
+    
+    # 2. Secure temp storage (Windows compatible)
+    temp_path = save_temp_file_securely(file)
+    
     try:
-        with tempfile.NamedTemporaryFile(
-            suffix=extension,
-            delete=False
-        ) as temp_file:
-            temp_file.write(contents)
-            temp_file_path = temp_file.name
-
-        # Run the existing Stage 1 feature extractor.
-        features = extract_features(temp_file_path)
-
-    except AudioLoadError as exc:
-        raise HTTPException(
-            status_code=400,
-            detail=str(exc)
-        ) from exc
-
+        # Placeholder stubs for Members 3 & 4 (until their engines plug in)
+        mock_heuristic_score = 0.1
+        mock_ml_probability = 0.15
+        mock_audio_quality = 0.95
+        
+        evidence = EvidenceInput(
+            heuristic_score=mock_heuristic_score,
+            ml_probability=mock_ml_probability,
+            audio_quality_score=mock_audio_quality,
+            insufficient_audio=False
+        )
+        
+        # 3. Run Risk Assessment Engine
+        assessment = risk_engine.assess_risk(evidence)
+        
+        return {
+            "filename": file.filename,
+            "assessment": assessment.model_dump()
+        }
+        
     finally:
-        if temp_file_path is not None and os.path.exists(temp_file_path):
-            os.remove(temp_file_path)
-
-    return {
-        "status": "success",
-        "filename": filename,
-        "features": features
-    }
+        # 4. Privacy enforcement: Securely delete biometric file
+        securely_delete_file(temp_path)
