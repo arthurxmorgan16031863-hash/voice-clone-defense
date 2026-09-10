@@ -2,16 +2,13 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 
-# Import Member 5's Security & Risk Modules
+# Import Member 5's Security Modules
 from backend.security.file_security import validate_audio_file, save_temp_file_securely, securely_delete_file
-from backend.risk.risk_engine import RiskEngine
-from backend.risk.risk_models import EvidenceInput
 
 # Import existing audio analyzer
 from backend.analysis.audio_analyzer import extract_features
 
 app = FastAPI(title="Voice Clone Defense API")
-risk_engine = RiskEngine()
 
 # Preserve existing CORS for frontend development
 app.add_middleware(
@@ -28,7 +25,13 @@ async def health_check():
 
 @app.post("/upload")
 async def upload_audio(file: UploadFile = File(...)):
+    # Enforce full validation, including the 25MB stream limit
     validate_audio_file(file)
+    temp_path = save_temp_file_securely(file)
+    
+    # Immediately delete since this endpoint is just for validation/upload checks
+    securely_delete_file(temp_path)
+    
     return {"status": "success", "message": "File uploaded and validated successfully."}
 
 @app.post("/analyze")
@@ -36,25 +39,23 @@ async def analyze_audio(file: UploadFile = File(...)):
     # 1. Security validation boundary
     validate_audio_file(file)
     
-    # 2. Secure temp storage (Windows compatible)
+    # 2. Secure temp storage (Windows compatible, 25MB limit)
     temp_path = save_temp_file_securely(file)
     
     try:
-        # 3. Preserve existing audio analysis (DO NOT BYPASS)
+        # 3. Preserve existing audio analysis
         features = extract_features(str(temp_path))
         
         # 4. Integration Placeholder for Members 3 & 4
-        # We are NOT fabricating ML/Heuristic scores here. 
-        # Using Option B to communicate the pending integration state.
         assessment_placeholder = {
+            "engine_status": "PENDING",
             "risk_score": None,
-            "risk_level": "PENDING_ENGINES",
-            "confidence": features.get("audio_quality_score", 0.0) if features else 0.0,
+            "risk_level": None,
+            "confidence": None,
             "reasons": ["Awaiting integration of ML and Heuristic detection engines."],
             "recommendation": "Detection engines pending. Review raw audio features."
         }
         
-        # 5. Maintain the exact expected response contract for the frontend
         return {
             "status": "success",
             "filename": file.filename,
@@ -63,5 +64,5 @@ async def analyze_audio(file: UploadFile = File(...)):
         }
         
     finally:
-        # 6. Privacy enforcement: Securely delete biometric file
+        # 5. Privacy enforcement: Securely delete biometric file
         securely_delete_file(temp_path)
